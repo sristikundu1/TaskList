@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { GrAttachment } from "react-icons/gr";
 import { PiChatsCircleLight } from "react-icons/pi";
 import { FaCalendarAlt } from "react-icons/fa";
@@ -7,18 +8,20 @@ import Swal from "sweetalert2";
 import { useEffect, useState } from "react";
 
 const Card = ({ item }) => {
-    const { name, taskName, views, comments, files, date } = item;
+    const { name, taskName, views, comments, date } = item;
     const [newfiles, setNewFiles] = useState([]);
-
-    const url = "http://localhost:5000/taskfile"
+    // show the file number from database 
+    const url = "https://task-server-xi.vercel.app/taskfile"
 
     useEffect(() => {
         fetch(url)
-        .then(res => res.json())
+            .then(res => res.json())
             .then(data => setNewFiles(data))
-        
+
     }, [url])
 
+
+    // upload the file in database 
     const handleUploadFile = e => {
 
         e.preventDefault();
@@ -32,7 +35,7 @@ const Card = ({ item }) => {
         console.log(uploadFile);
 
 
-        fetch("http://localhost:5000/taskfile", {
+        fetch("https://task-server-xi.vercel.app/taskfile", {
             method: 'POST',
             headers: {
                 'content-type': "application/json"
