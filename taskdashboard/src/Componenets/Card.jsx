@@ -3,9 +3,35 @@ import { PiChatsCircleLight } from "react-icons/pi";
 import { FaCalendarAlt } from "react-icons/fa";
 import { LiaClipboardListSolid } from "react-icons/lia";
 import { BsLayersFill } from "react-icons/bs";
+import Swal from "sweetalert2";
 
-const Card = ({item}) => {
-    const {name,taskName,views,comments,files,date} = item;
+const Card = ({ item }) => {
+    const { name, taskName, views, comments, files, date } = item;
+
+    const handleUploadFile = e => {
+
+        e.preventDefault();
+
+        const form = e.target;
+
+
+        const file = form.file.files[0].name;
+
+        const uploadFile = { file };
+        console.log(uploadFile);
+
+        Swal.fire({
+            title: 'success!',
+            text: 'You have successfully upload the file',
+            icon: 'success',
+            confirmButtonText: 'Ok'
+        })
+
+       
+
+    }
+
+
     return (
         <div className=" h-[163px] w-72  p-2  bg-white rounded-lg">
             {/* people that created task  */}
@@ -32,7 +58,7 @@ const Card = ({item}) => {
                 </div>
             </div>
 
-          {/* task information  */}
+            {/* task information  */}
             <div className="flex gap-3 items-center">
                 <img className="rounded-full w-6 h-6" src="https://img.freepik.com/free-photo/smiley-businesswoman-posing-outdoors-with-arms-crossed-copy-space_23-2148767055.jpg" alt="" />
                 <img className="rounded-full w-6 h-6 " src="https://img.freepik.com/free-photo/portrait-handsome-smiling-stylish-young-man-model-dressed-red-checkered-shirt-fashion-man-posing_158538-4914.jpg" alt="" />
@@ -44,7 +70,31 @@ const Card = ({item}) => {
                 </div>
 
                 <div className="flex gap-1 items-center">
-                    <GrAttachment className=" text-xs "></GrAttachment>
+                    <GrAttachment onClick={() => document.getElementById('my_modal_5').showModal()}
+                        className=" text-xs "></GrAttachment>
+                    <dialog id="my_modal_5" className="modal modal-bottom sm:modal-middle">
+                        <div className="modal-box">
+                            <h3 className="font-bold text-lg text-center text-[#025464]">Upload the file.</h3>
+                            <form onSubmit={handleUploadFile} className="card-body">
+                                <div className="form-control">
+                                    <label className="label">
+                                        <span className="label-text">File</span>
+                                    </label>
+                                    <input type="file" name="file" className="input input-bordered" required />
+
+                                </div>
+                                <div className="form-control mt-6">
+                                    <button className="btn capitalize bg-[#E57C23]">Submit</button>
+                                </div>
+                            </form>
+                            <div className="modal-action">
+                                <form method="dialog">
+                                    {/* if there is a button in form, it will close the modal */}
+                                    <button className="btn">Close</button>
+                                </form>
+                            </div>
+                        </div>
+                    </dialog>
                     <p className="text-xs font-medium text-gray-700 ">{files}</p>
                 </div>
 
