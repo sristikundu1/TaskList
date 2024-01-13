@@ -4,9 +4,20 @@ import { FaCalendarAlt } from "react-icons/fa";
 import { LiaClipboardListSolid } from "react-icons/lia";
 import { BsLayersFill } from "react-icons/bs";
 import Swal from "sweetalert2";
+import { useEffect, useState } from "react";
 
 const Card = ({ item }) => {
     const { name, taskName, views, comments, files, date } = item;
+    const [newfiles, setNewFiles] = useState([]);
+
+    const url = "http://localhost:5000/taskfile"
+
+    useEffect(() => {
+        fetch(url)
+        .then(res => res.json())
+            .then(data => setNewFiles(data))
+        
+    }, [url])
 
     const handleUploadFile = e => {
 
@@ -20,14 +31,30 @@ const Card = ({ item }) => {
         const uploadFile = { file };
         console.log(uploadFile);
 
-        Swal.fire({
-            title: 'success!',
-            text: 'You have successfully upload the file',
-            icon: 'success',
-            confirmButtonText: 'Ok'
-        })
 
-       
+        fetch("http://localhost:5000/taskfile", {
+            method: 'POST',
+            headers: {
+                'content-type': "application/json"
+            },
+            body: JSON.stringify(uploadFile)
+        })
+            .then(res => res.json())
+            .then(data => {
+                console.log("Inside post response", data);
+                if (data.insertedId) {
+
+                    Swal.fire({
+                        title: 'success!',
+                        text: 'You have successfully upload the file',
+                        icon: 'success',
+                        confirmButtonText: 'Ok'
+                    })
+                    form.reset();
+                }
+            })
+
+
 
     }
 
@@ -95,7 +122,7 @@ const Card = ({ item }) => {
                             </div>
                         </div>
                     </dialog>
-                    <p className="text-xs font-medium text-gray-700 ">{files}</p>
+                    <p className="text-xs font-medium text-gray-700 ">{newfiles.length}</p>
                 </div>
 
                 <div className="flex gap-2 items-center">
